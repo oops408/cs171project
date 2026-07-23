@@ -1,0 +1,30 @@
+# Raw data is downloaded by the pipeline and should not be committed.
+data/*.xlsx
+data/*.xls
+data/*.zip
+data/*.csv
+!data/.gitkeep
+
+# Trained model binaries can be regenerated.
+models/*.joblib
+models/*.pt
+models/*.pth
+!models/.gitkeep
+
+# Python / notebook files
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+.env
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Temporary outputs
+outputs/tmp/
+*.log
