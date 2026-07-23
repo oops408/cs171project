@@ -8,7 +8,7 @@ This repository predicts USDA ERS Food-at-Home Monthly Area Prices using a leaka
 
 The pipeline performs EDA, leakage-safe lag and rolling features, a chronological split, a mean baseline, Ridge Regression, Decision Tree, Random Forest, MLP, and a PyTorch LSTM. It saves validation metrics, training curves, feature importance, and error analysis.
 
-The 2018 test set is intentionally reserved by default. Do not use `--evaluate-test` until all model and feature choices are frozen.
+The 2018 test set is intentionally reserved by default. Do not use `--evaluate-test` until all model and feature choices are set.
 
 ## Colab setup
 
@@ -41,13 +41,13 @@ pip install -r requirements.txt
 python src/checkpoint1.py
 ```
 
-Fast smoke test:
+Quick Test:
 
 ```bash
 python src/checkpoint1.py --quick --skip-lstm
 ```
 
-Final test evaluation, only after freezing the project design:
+Final Test Evaluation:
 
 ```bash
 python src/checkpoint1.py --evaluate-test
