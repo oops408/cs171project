@@ -1,0 +1,2 @@
+rows,columns,years,months,food_groups,areas,missing_cells,duplicate_keys,target_mean,target_median,target_std,target_min,target_max,target_skew
+113400,15,2012-2018,84,90,15,0,0,0.5963235097001764,0.46,0.44413155063898924,0.033,3.29,1.7857235009038728
