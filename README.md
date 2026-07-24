@@ -23,6 +23,8 @@ The 2018 test set is intentionally reserved by default. Do not use `--evaluate-t
 
 ## Colab setup
 
+https://colab.research.google.com/gist/oops408/0075f7e3ad256f783b278253088a1954/cs171_checkpoint1_colab.ipynb
+
 Open `notebooks/CS171_Checkpoint1_Colab.ipynb` in Google Colab and select **Runtime > Change runtime type > T4 GPU**. Run all cells. The notebook clones this repository, installs dependencies, trains the models, and downloads the generated outputs.
 
 ## Local setup
