@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
-"""CS 171 Group Project - Checkpoint 1 pipeline.
+"""CS 171 Group Project - final submission pipeline.
 
 This script downloads the USDA ERS Food-at-Home Monthly Area Prices dataset,
-performs EDA, creates leakage-safe lag features, uses a chronological split,
-trains several regression model families, and saves tables/figures for the
-checkpoint report.
+performs EDA and per-food-group outlier analysis, creates leakage-safe lag
+features, uses a chronological split, trains and tunes five regression model
+families (Ridge, Decision Tree, Random Forest, MLP, LSTM) against a mean
+baseline, and saves every table and figure used in the final IEEE report:
+validation metrics, held-out 2018 test metrics, training curves, a
+regularization-effect chart, feature importance, error analysis by food group
+and region, an end-to-end pipeline overview diagram, and neural-network
+runtime tracking.
 
 Default split:
     training targets:   2013-2016
@@ -12,9 +17,9 @@ Default split:
     reserved test:      2018
 
 The raw 2012 observations are used only as historical context for 12-month lag
-features. By default, the script does not report 2018 test metrics, so the test
-set remains untouched for the final paper. Use --evaluate-test only after the
-team has frozen all modeling and tuning decisions.
+features. Model and feature choices for this project are frozen, so
+`--evaluate-test` is the standard final run; pass no flag for a validation-only
+run during earlier development.
 """
 
 from __future__ import annotations

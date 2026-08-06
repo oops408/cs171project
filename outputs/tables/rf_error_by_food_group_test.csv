@@ -1,91 +1,91 @@
 EFPG_name,MAE,count
-"Other starchy vegetables, fresh cut",0.0796701607226957,180
-Vitamins and meal supplements,0.06275089380833652,180
-Dry spices,0.05899418369722868,180
+"Other starchy vegetables, fresh cut",0.07967016072269571,180
+Vitamins and meal supplements,0.06275089380833647,180
+Dry spices,0.05899418369722869,180
 "Dark green vegetables, fresh cut",0.056294743197710814,180
-"Beef, pork, lamb, veal and game, canned",0.05144597453678776,180
-Unsweetened coffee and tea,0.048612639932254974,180
-Infant formula,0.047185836003687656,180
+"Beef, pork, lamb, veal and game, canned",0.05144597453678777,180
+Unsweetened coffee and tea,0.04861263993225495,180
+Infant formula,0.04718583600368765,180
 "Fish and seafood, frozen",0.04546880453312369,180
-"Fish and seafood, fresh",0.043822137432047194,180
-"Other red and orange vegetables, frozen",0.04372647657631935,180
-"Bacon, sausage, and lunch meats",0.04158118925412857,180
-"Chicken, turkey, and game birds, frozen",0.040922969781016276,180
-"Whole fruit, dried",0.03870441933459889,180
+"Fish and seafood, fresh",0.04382213743204715,180
+"Other red and orange vegetables, frozen",0.043726476576319354,180
+"Bacon, sausage, and lunch meats",0.041581189254128584,180
+"Chicken, turkey, and game birds, frozen",0.04092296978101627,180
+"Whole fruit, dried",0.0387044193345989,180
 "Chicken, turkey, and game birds, canned",0.03750899008085834,180
 "Whole fruit, fresh cut",0.03487791322823675,180
-"Fish and seafood, canned",0.031743995577524636,180
-Candy,0.0310857933284362,180
-Nuts and seeds,0.03061219806397077,180
-"Beef, pork, lamb, veal and game, frozen",0.029254473042744162,180
-All other desserts,0.02379589769561591,180
-"Whole fruit, frozen",0.02019278809126026,180
-Tofu and meat substitutes,0.01990610734523094,180
-"Savory snacks, whole-grain snacks",0.01970275643799656,180
-Egg and egg substitutes,0.019120698128575198,180
-Processed cheese,0.018393573440675468,180
-Ready-to-eat foods,0.01837633147828068,180
+"Fish and seafood, canned",0.03174399557752466,180
+Candy,0.031085793328436175,180
+Nuts and seeds,0.03061219806397079,180
+"Beef, pork, lamb, veal and game, frozen",0.02925447304274415,180
+All other desserts,0.023795897695615915,180
+"Whole fruit, frozen",0.020192788091260273,180
+Tofu and meat substitutes,0.01990610734523096,180
+"Savory snacks, whole-grain snacks",0.019702756437996547,180
+Egg and egg substitutes,0.019120698128575205,180
+Processed cheese,0.01839357344067549,180
+Ready-to-eat foods,0.018376331478280675,180
 "Beef, pork, lamb, veal and game, fresh",0.018178281724035936,180
-"Dark green vegetables, fresh",0.017813604846183922,180
-"Tomatoes, fresh",0.017167539663761527,180
-Cheese and cream cheese,0.01623734475690108,180
-"Other/mixed vegetables, fresh cut",0.01604739579771467,180
-Baby food,0.015219852464034522,180
-"Beans, lentils, and peas, frozen",0.01417792732860432,180
+"Dark green vegetables, fresh",0.01781360484618391,180
+"Tomatoes, fresh",0.01716753966376153,180
+Cheese and cream cheese,0.016237344756901074,180
+"Other/mixed vegetables, fresh cut",0.01604739579771469,180
+Baby food,0.01521985246403451,180
+"Beans, lentils, and peas, frozen",0.014177927328604326,180
 Baked goods,0.01357634079317099,180
-Fats and oils,0.013013503752674014,180
-Jellies and jams,0.012984886365807998,180
-Sweeteners,0.012935154498950758,180
-"Savory snacks, all other snacks",0.012745468300949013,180
-Cake and cookie mixes,0.012141032704040645,180
-"Other starchy vegetables, fresh",0.01187863077118473,180
-Nut and seed butters and spreads,0.011874281064005916,180
-"Other/mixed vegetables, canned",0.01176157630749057,180
+Fats and oils,0.013013503752674006,180
+Jellies and jams,0.01298488636580799,180
+Sweeteners,0.012935154498950755,180
+"Savory snacks, all other snacks",0.012745468300949048,180
+Cake and cookie mixes,0.012141032704040653,180
+"Other starchy vegetables, fresh",0.011878630771184732,180
+Nut and seed butters and spreads,0.011874281064005923,180
+"Other/mixed vegetables, canned",0.011761576307490558,180
 "Other red and orange vegetables, fresh",0.011756423098621526,180
-All other breakfast cereal,0.011595423813797967,180
-"Potatoes, canned",0.011554790500676766,180
-Whole-grain rice and pasta,0.011001089392048469,180
-"Chicken, turkey, and game birds, fresh",0.010706631592391788,180
-Whole yogurt,0.010379968674021894,180
-"Other red and orange vegetables, canned",0.01011524839332035,180
-Salad dressing,0.009513833279717634,180
-Whole-grain breakfast cereal,0.009494654474605029,180
-Non-whole-grain breakfast grains,0.009404356724482723,180
-"Other red and orange vegetables, fresh cut",0.009401699250990488,180
+All other breakfast cereal,0.011595423813797974,180
+"Potatoes, canned",0.011554790500676761,180
+Whole-grain rice and pasta,0.011001089392048476,180
+"Chicken, turkey, and game birds, fresh",0.010706631592391793,180
+Whole yogurt,0.010379968674021883,180
+"Other red and orange vegetables, canned",0.010115248393320352,180
+Salad dressing,0.009513833279717625,180
+Whole-grain breakfast cereal,0.009494654474605041,180
+Non-whole-grain breakfast grains,0.009404356724482721,180
+"Other red and orange vegetables, fresh cut",0.009401699250990476,180
 "Other/mixed vegetables, fresh",0.00924839906009383,180
-"Other/mixed vegetables, frozen",0.009081012293901604,180
-"Other starchy vegetables, canned",0.009017996668352455,180
-Frozen and refrigerated ready-to-heat foods,0.008941755562698139,180
-Non-whole-grain rice and pasta,0.00889399938847245,180
+"Other/mixed vegetables, frozen",0.009081012293901613,180
+"Other starchy vegetables, canned",0.009017996668352448,180
+Frozen and refrigerated ready-to-heat foods,0.008941755562698142,180
+Non-whole-grain rice and pasta,0.008893999388472457,180
 Alcohol,0.00881922501661047,180
-"Potatoes, fresh",0.008813915356582549,180
-Whole-grain breads,0.008571884135639408,180
-"Whole fruit, fresh",0.008564140725910909,180
-Ice cream and other milk-based desserts,0.00830866674746819,180
-Whole-grain breakfast grains,0.007943921792450568,180
-"Whole fruit, canned",0.007656153037780563,180
-"Tomatoes, canned",0.007597563623068586,180
-"Whole-grain flour, bread mixes, and frozen dough",0.007560757288838153,180
-Whole cream and sour cream,0.0070645972630578036,180
-Sweetened coffee and tea,0.007047472487781996,180
+"Potatoes, fresh",0.008813915356582547,180
+Whole-grain breads,0.008571884135639413,180
+"Whole fruit, fresh",0.008564140725910904,180
+Ice cream and other milk-based desserts,0.008308666747468196,180
+Whole-grain breakfast grains,0.00794392179245056,180
+"Whole fruit, canned",0.0076561530377805605,180
+"Tomatoes, canned",0.0075975636230685845,180
+"Whole-grain flour, bread mixes, and frozen dough",0.007560757288838149,180
+Whole cream and sour cream,0.007064597263057806,180
+Sweetened coffee and tea,0.007047472487781993,180
 "Other starchy vegetables, frozen",0.006907170737676779,180
-"Dark green vegetables, frozen",0.006883673956874384,180
-Non-whole-grain breads,0.006677307167393614,180
+"Dark green vegetables, frozen",0.006883673956874392,180
+Non-whole-grain breads,0.006677307167393619,180
 "Condiments, gravies, and sauces",0.006548801631710731,180
 "Shelf-stable, ready-to-heat foods and soups",0.006306069843775084,180
-"Non-whole-grain flour, bread mixes, and frozen dough",0.006291799013260865,180
-"Dark green vegetables, canned",0.006217726534982812,180
-"Beans, lentils, and peas, fresh/dried",0.006214592947955121,180
-"Reduced-fat, low-fat, and skim cream and sour cream",0.005299230806697676,180
-"Reduced-fat, low-fat, and skim yogurt",0.004764099798108615,180
-"100-percent fruit and vegetable juices, frozen",0.004578353640246749,180
-Shelf-stable meal kits,0.004334336459274309,180
-"100-percent fruit and vegetable juices, fresh",0.004017655993605853,180
-"100-percent fruit and vegetable juices, canned and shelf-stable",0.003998090248625318,180
-"Beans, lentils, and peas, canned",0.003822912085176927,180
-Low-calorie beverages,0.0037186520594770156,180
-All other caloric beverages,0.0033270791935708925,180
-Flavored milk and other sweetened milk-based beverages,0.002699802645534352,180
-Whole milk,0.002561139892648333,180
-"Reduced-fat, low-fat, and skim milk",0.0016612174521861709,180
-Water,0.0015304153112720585,180
+"Non-whole-grain flour, bread mixes, and frozen dough",0.0062917990132608645,180
+"Dark green vegetables, canned",0.006217726534982809,180
+"Beans, lentils, and peas, fresh/dried",0.006214592947955108,180
+"Reduced-fat, low-fat, and skim cream and sour cream",0.0052992308066976785,180
+"Reduced-fat, low-fat, and skim yogurt",0.004764099798108616,180
+"100-percent fruit and vegetable juices, frozen",0.0045783536402467465,180
+Shelf-stable meal kits,0.004334336459274308,180
+"100-percent fruit and vegetable juices, fresh",0.0040176559936058506,180
+"100-percent fruit and vegetable juices, canned and shelf-stable",0.003998090248625322,180
+"Beans, lentils, and peas, canned",0.0038229120851769258,180
+Low-calorie beverages,0.0037186520594770147,180
+All other caloric beverages,0.0033270791935708934,180
+Flavored milk and other sweetened milk-based beverages,0.0026998026455343498,180
+Whole milk,0.0025611398926483338,180
+"Reduced-fat, low-fat, and skim milk",0.0016612174521861713,180
+Water,0.0015304153112720576,180

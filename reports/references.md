@@ -1,10 +1,11 @@
-# Draft References (IEEE style)
+# References (IEEE Style)
 
-Paste whichever of these you actually cite in-text into the paper's References
-section, in order of first appearance. Verify each against the source before
-submitting — you're responsible for anything you cite.
+Bibliography for the dataset and methods used in `CS171-FinalReport.docx`.
+Entries are numbered here by category; renumber by order of first in-text
+appearance when inserting into the paper's References section, per IEEE
+convention. Include the software entries only if they are cited in text.
 
-**Dataset (required — the paper currently cites nothing):**
+## Dataset
 
 ```
 [1] U.S. Department of Agriculture, Economic Research Service, "Food-at-Home
@@ -12,7 +13,7 @@ submitting — you're responsible for anything you cite.
     https://www.ers.usda.gov/media/5399/food-at-home-monthly-area-prices-2012-to-2018.xlsx
 ```
 
-**Methods used in the paper (cite the ones you directly build on):**
+## Methods
 
 ```
 [2] L. Breiman, "Random forests," Machine Learning, vol. 45, no. 1, pp. 5-32,
@@ -29,7 +30,7 @@ submitting — you're responsible for anything you cite.
     nonorthogonal problems," Technometrics, vol. 12, no. 1, pp. 55-67, 1970.
 ```
 
-**Software (optional, but you did build on both):**
+## Software
 
 ```
 [6] F. Pedregosa et al., "Scikit-learn: Machine learning in Python," Journal
@@ -39,6 +40,3 @@ submitting — you're responsible for anything you cite.
     learning library," in Advances in Neural Information Processing Systems
     32 (NeurIPS 2019), 2019, pp. 8024-8035.
 ```
-
-Renumber to match actual order of first in-text citation — IEEE numbers by
-appearance, not by category.
