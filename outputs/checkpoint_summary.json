@@ -2,57 +2,59 @@
   "dataset": {
     "rows": 113400,
     "columns": 15,
-    "years": "2012-2018",
-    "months": 84,
+    "first_year": 2012,
+    "last_year": 2018,
+    "unique_months": 84,
     "food_groups": 90,
-    "areas": 15,
+    "geographic_areas": 15,
     "missing_cells": 0,
     "duplicate_keys": 0,
     "target_mean": 0.5963235097001764,
     "target_median": 0.46,
-    "target_std": 0.44413155063898924,
-    "target_min": 0.033,
-    "target_max": 3.29,
-    "target_skew": 1.7857235009038728
+    "target_standard_deviation": 0.44413155063898924,
+    "target_minimum": 0.033,
+    "target_maximum": 3.29,
+    "target_skewness": 1.7857235009038728
   },
   "split": {
     "train_years": "2013-2016",
-    "validation_year": "2017",
-    "reserved_test_year": "2018",
+    "validation_year": 2017,
+    "reserved_test_year": 2018,
     "train_rows": 64800,
     "validation_rows": 16200,
-    "test_rows": 16200
+    "test_rows": 16200,
+    "note": "2012 is used only as historical context for lag features."
   },
   "validation_metrics": [
     {
       "Model": "Random Forest",
-      "RMSE": 0.030130972530813073,
-      "MAE": 0.016092032823588374,
-      "R2": 0.995692519179614
+      "RMSE": 0.03013763917742162,
+      "MAE": 0.016085105640403257,
+      "R2": 0.9956906128601806
     },
     {
       "Model": "LSTM",
-      "RMSE": 0.03288307219158604,
-      "MAE": 0.01786750001370928,
-      "R2": 0.9948697110472535
+      "RMSE": 0.032880849410560575,
+      "MAE": 0.017867378890514374,
+      "R2": 0.9948704242706299
     },
     {
       "Model": "MLP",
       "RMSE": 0.0330709497309354,
-      "MAE": 0.021836103425003917,
+      "MAE": 0.021836103425003913,
       "R2": 0.9948109197447372
     },
     {
       "Model": "Decision Tree",
-      "RMSE": 0.03323262776639655,
-      "MAE": 0.018256580042625967,
-      "R2": 0.9947600587278767
+      "RMSE": 0.03323258281334568,
+      "MAE": 0.018256216932914796,
+      "R2": 0.9947600729037757
     },
     {
       "Model": "Ridge",
-      "RMSE": 0.0332385730286863,
-      "MAE": 0.017420502575875272,
-      "R2": 0.9947581837264738
+      "RMSE": 0.0332385140720425,
+      "MAE": 0.017420261171927947,
+      "R2": 0.9947582023217139
     },
     {
       "Model": "Mean baseline",
@@ -61,15 +63,14 @@
       "R2": -0.000578647936000376
     }
   ],
-  "best_model": "Random Forest",
-  "best_rf_parameters": {
-    "n_estimators": 100,
-    "max_depth": 20,
-    "min_samples_leaf": 2
-  },
-  "lstm": {
-    "epochs_run": 24,
-    "best_epoch": 19,
-    "best_validation_standardized_mse": 0.005659745204043977
+  "best_validation_model": "Random Forest",
+  "seed": 42,
+  "quick_mode": false,
+  "lstm_device": "cpu",
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "versions": {
+    "numpy": "2.4.4",
+    "pandas": "3.0.3",
+    "torch": "2.13.0+cpu"
   }
 }

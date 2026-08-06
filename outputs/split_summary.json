@@ -1,0 +1,9 @@
+{
+  "train_years": "2013-2016",
+  "validation_year": 2017,
+  "reserved_test_year": 2018,
+  "train_rows": 64800,
+  "validation_rows": 16200,
+  "test_rows": 16200,
+  "note": "2012 is used only as historical context for lag features."
+}

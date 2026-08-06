@@ -746,6 +746,27 @@ def save_eda_figures(frame: pd.DataFrame, figure_dir: Path) -> None:
     plt.close()
 
 
+def plot_actual_vs_predicted(
+    actual: np.ndarray, predicted: np.ndarray, title: str, path: Path
+) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    plt.figure(figsize=(5.5, 5.2))
+    plt.scatter(actual, predicted, s=7, alpha=0.25)
+    limits = [
+        min(float(actual.min()), float(predicted.min())),
+        max(float(actual.max()), float(predicted.max())),
+    ]
+    plt.plot(limits, limits, linestyle="--", linewidth=1.2)
+    plt.xlim(limits)
+    plt.ylim(limits)
+    plt.xlabel("Actual weighted unit price")
+    plt.ylabel("Predicted weighted unit price")
+    plt.title(title)
+    plt.tight_layout()
+    plt.savefig(path, dpi=200, bbox_inches="tight")
+    plt.close()
+
+
 def save_model_figures(
     metrics_frame: pd.DataFrame,
     validation_frame: pd.DataFrame,
@@ -777,22 +798,12 @@ def save_model_figures(
     plt.savefig(figure_dir / "model_comparison.png", dpi=200, bbox_inches="tight")
     plt.close()
 
-    actual = validation_frame[TARGET].to_numpy()
-    plt.figure(figsize=(5.5, 5.2))
-    plt.scatter(actual, random_forest_prediction, s=7, alpha=0.25)
-    limits = [
-        min(float(actual.min()), float(random_forest_prediction.min())),
-        max(float(actual.max()), float(random_forest_prediction.max())),
-    ]
-    plt.plot(limits, limits, linestyle="--", linewidth=1.2)
-    plt.xlim(limits)
-    plt.ylim(limits)
-    plt.xlabel("Actual weighted unit price")
-    plt.ylabel("Predicted weighted unit price")
-    plt.title("Random Forest: Actual vs. Predicted (2017)")
-    plt.tight_layout()
-    plt.savefig(figure_dir / "rf_actual_vs_predicted.png", dpi=200, bbox_inches="tight")
-    plt.close()
+    plot_actual_vs_predicted(
+        validation_frame[TARGET].to_numpy(),
+        random_forest_prediction,
+        "Random Forest: Actual vs. Predicted (2017 Validation Set)",
+        figure_dir / "rf_actual_vs_predicted.png",
+    )
 
     forest_regressor = random_forest_model.named_steps["regressor"]
     importance = pd.Series(
@@ -865,13 +876,28 @@ def save_model_figures(
 
 def evaluate_reserved_test(
     fitted_models: dict[str, Any], split: SplitData
-) -> pd.DataFrame:
+) -> tuple[pd.DataFrame, dict[str, np.ndarray]]:
     rows = []
+    predictions: dict[str, np.ndarray] = {}
     x_test = split.test[FEATURES]
     y_test = split.test[TARGET]
     for name, model in fitted_models.items():
-        rows.append({"Model": name, **regression_metrics(y_test, model.predict(x_test))})
-    return pd.DataFrame(rows).sort_values("RMSE").reset_index(drop=True)
+        prediction = model.predict(x_test)
+        predictions[name] = prediction
+        rows.append({"Model": name, **regression_metrics(y_test, prediction)})
+    metrics_frame = pd.DataFrame(rows).sort_values("RMSE").reset_index(drop=True)
+    return metrics_frame, predictions
+
+
+def evaluate_lstm_reserved_test(
+    model: PriceLSTM, data: LSTMData, device: torch.device
+) -> tuple[dict[str, float], np.ndarray, np.ndarray]:
+    test_mask = data.years == 2018
+    test_loader = make_lstm_loader(data, test_mask, 1024, False)
+    actual, predicted = predict_lstm(
+        model, test_loader, device, data.price_mean, data.price_std
+    )
+    return regression_metrics(actual, predicted), actual, predicted
 
 
 def save_json(path: Path, data: Any) -> None:
@@ -973,9 +999,26 @@ def main() -> int:
     )
 
     if args.evaluate_test:
-        test_metrics = evaluate_reserved_test(fitted_models, split)
+        test_metrics, test_predictions = evaluate_reserved_test(fitted_models, split)
+        if lstm_model is not None:
+            lstm_device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+            lstm_test_scores, _, lstm_test_predictions = evaluate_lstm_reserved_test(
+                lstm_model, lstm_data, lstm_device
+            )
+            test_predictions["LSTM"] = lstm_test_predictions
+            test_metrics = pd.concat(
+                [test_metrics, pd.DataFrame([{"Model": "LSTM", **lstm_test_scores}])],
+                ignore_index=True,
+            ).sort_values("RMSE").reset_index(drop=True)
         test_metrics.to_csv(table_dir / "test_metrics.csv", index=False)
         print("\nReserved 2018 test metrics:\n", test_metrics.to_string(index=False))
+
+        plot_actual_vs_predicted(
+            split.test[TARGET].to_numpy(),
+            test_predictions["Random Forest"],
+            "Random Forest: Actual vs. Predicted (2018 Test Set)",
+            figure_dir / "rf_actual_vs_predicted_test.png",
+        )
     else:
         print(
             "\n2018 test metrics were intentionally not computed. "
