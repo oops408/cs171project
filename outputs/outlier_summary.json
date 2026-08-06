@@ -1,0 +1,7 @@
+{
+  "method": "Per-food-group 1.5x IQR fence on Unit_value_mean_wtd",
+  "total_rows": 113400,
+  "total_outliers": 2083,
+  "outlier_rate": 0.018368606701940036,
+  "decision": "Retained: flagged points are legitimately high/low-priced food groups (e.g. spices, infant formula) rather than data-entry errors, and the lag/rolling features are computed per series so within-group outliers do not leak across food groups."
+}

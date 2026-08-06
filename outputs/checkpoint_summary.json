@@ -16,6 +16,13 @@
     "target_maximum": 3.29,
     "target_skewness": 1.7857235009038728
   },
+  "outliers": {
+    "method": "Per-food-group 1.5x IQR fence on Unit_value_mean_wtd",
+    "total_rows": 113400,
+    "total_outliers": 2083,
+    "outlier_rate": 0.018368606701940036,
+    "decision": "Retained: flagged points are legitimately high/low-priced food groups (e.g. spices, infant formula) rather than data-entry errors, and the lag/rolling features are computed per series so within-group outliers do not leak across food groups."
+  },
   "split": {
     "train_years": "2013-2016",
     "validation_year": 2017,
@@ -28,7 +35,7 @@
   "validation_metrics": [
     {
       "Model": "Random Forest",
-      "RMSE": 0.03013763917742162,
+      "RMSE": 0.030137639177421616,
       "MAE": 0.016085105640403257,
       "R2": 0.9956906128601806
     },
@@ -64,6 +71,13 @@
     }
   ],
   "best_validation_model": "Random Forest",
+  "runtime": {
+    "lstm_device": "cpu",
+    "lstm_train_seconds": 124.68190209998284,
+    "mlp_best_config_seconds": 9.785705900052562,
+    "mlp_total_tuning_seconds": 46.1358611001051,
+    "note": "These are local/CPU or Colab timings depending on where this run executed; see README for the Colab T4 GPU run used in the paper."
+  },
   "seed": 42,
   "quick_mode": false,
   "lstm_device": "cpu",

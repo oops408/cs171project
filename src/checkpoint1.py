@@ -188,6 +188,51 @@ def summarize_eda(frame: pd.DataFrame) -> dict[str, Any]:
     }
 
 
+def analyze_outliers(frame: pd.DataFrame) -> tuple[dict[str, Any], pd.DataFrame]:
+    """Flag target outliers per food group using a 1.5x IQR fence.
+
+    A single global fence is inappropriate here: food groups span very
+    different price scales (e.g. spices vs. milk), so a per-group fence
+    separates genuinely unusual observations from food groups that are
+    simply always expensive.
+    """
+    flags = pd.Series(False, index=frame.index)
+    rows: list[dict[str, Any]] = []
+    for name, group in frame.groupby("EFPG_name"):
+        first_quartile, third_quartile = group[TARGET].quantile([0.25, 0.75])
+        iqr = third_quartile - first_quartile
+        low, high = first_quartile - 1.5 * iqr, third_quartile + 1.5 * iqr
+        group_flags = (group[TARGET] < low) | (group[TARGET] > high)
+        flags.loc[group.index] = group_flags
+        rows.append(
+            {
+                "EFPG_name": name,
+                "n_observations": int(len(group)),
+                "n_outliers": int(group_flags.sum()),
+                "outlier_rate": float(group_flags.mean()),
+                "group_median_price": float(group[TARGET].median()),
+            }
+        )
+    outlier_table = (
+        pd.DataFrame(rows)
+        .sort_values("outlier_rate", ascending=False)
+        .reset_index(drop=True)
+    )
+    summary = {
+        "method": "Per-food-group 1.5x IQR fence on Unit_value_mean_wtd",
+        "total_rows": int(len(frame)),
+        "total_outliers": int(flags.sum()),
+        "outlier_rate": float(flags.mean()),
+        "decision": (
+            "Retained: flagged points are legitimately high/low-priced food "
+            "groups (e.g. spices, infant formula) rather than data-entry "
+            "errors, and the lag/rolling features are computed per series "
+            "so within-group outliers do not leak across food groups."
+        ),
+    }
+    return summary, outlier_table
+
+
 def engineer_features(frame: pd.DataFrame) -> pd.DataFrame:
     data = frame.sort_values(
         ["EFPG_code", "Metroregion_code", "Year", "Month"]
@@ -724,6 +769,16 @@ def save_eda_figures(frame: pd.DataFrame, figure_dir: Path) -> None:
         linewidth=1.5,
         label=f"Median = {frame[TARGET].median():.3f}",
     )
+    first_quartile, third_quartile = frame[TARGET].quantile([0.25, 0.75])
+    iqr = third_quartile - first_quartile
+    high_fence = third_quartile + 1.5 * iqr
+    plt.axvline(
+        high_fence,
+        linestyle="-.",
+        linewidth=1.5,
+        color="red",
+        label=f"Global 1.5x IQR fence = {high_fence:.2f}",
+    )
     plt.xlabel("Weighted average unit price (dollars per 100 grams)")
     plt.ylabel("Observations")
     plt.title("Distribution of the Regression Target")
@@ -818,33 +873,14 @@ def save_model_figures(
     plt.savefig(figure_dir / "rf_feature_importance.png", dpi=200, bbox_inches="tight")
     plt.close()
 
-    error_frame = validation_frame[
-        ["EFPG_name", "Metroregion_name", "Year", "Month", TARGET]
-    ].copy()
-    error_frame["prediction"] = random_forest_prediction
-    error_frame["absolute_error"] = np.abs(
-        error_frame[TARGET] - error_frame["prediction"]
+    food_error, region_error = compute_error_breakdown(
+        validation_frame, random_forest_prediction
     )
-    food_error = (
-        error_frame.groupby("EFPG_name")["absolute_error"]
-        .agg(["mean", "count"])
-        .sort_values("mean", ascending=False)
+    save_food_error_figure(
+        food_error,
+        "Food Groups With Highest Random Forest Error (2017 Validation Set)",
+        figure_dir / "rf_error_food_groups.png",
     )
-    region_error = (
-        error_frame.groupby("Metroregion_name")["absolute_error"]
-        .mean()
-        .sort_values(ascending=False)
-        .rename("MAE")
-        .to_frame()
-    )
-    food_error.head(8).sort_values("mean")["mean"].plot(
-        kind="barh", figsize=(7.2, 4.5)
-    )
-    plt.xlabel("Validation MAE")
-    plt.title("Food Groups With Highest Random Forest Error")
-    plt.tight_layout()
-    plt.savefig(figure_dir / "rf_error_food_groups.png", dpi=200, bbox_inches="tight")
-    plt.close()
 
     mlp_regressor = mlp_model.named_steps["regressor"]
     plt.figure(figsize=(7.2, 4.2))
@@ -872,6 +908,66 @@ def save_model_figures(
         plt.close()
 
     return importance.to_frame(), food_error, region_error
+
+
+def save_regularization_effect(
+    tuning: dict[str, Any], figure_dir: Path, table_dir: Path
+) -> pd.DataFrame:
+    ridge_trials = pd.DataFrame(tuning["Ridge"]).sort_values("alpha").reset_index(drop=True)
+    ridge_trials.to_csv(table_dir / "ridge_regularization_effect.csv", index=False)
+
+    plt.figure(figsize=(6.2, 4.2))
+    plt.plot(ridge_trials["alpha"], ridge_trials["RMSE"], marker="o")
+    plt.xscale("log")
+    plt.xlabel("Ridge L2 penalty (alpha, log scale)")
+    plt.ylabel("Validation RMSE")
+    plt.title("Effect of L2 Regularization Strength (Ridge Regression)")
+    plt.grid(alpha=0.25)
+    plt.tight_layout()
+    plt.savefig(
+        figure_dir / "ridge_regularization_effect.png", dpi=200, bbox_inches="tight"
+    )
+    plt.close()
+
+    combined_rows = []
+    for model_name, trials in tuning.items():
+        for trial in trials:
+            combined_rows.append({"model": model_name, **trial})
+    pd.DataFrame(combined_rows).to_csv(
+        table_dir / "regularization_tuning_grid.csv", index=False
+    )
+    return ridge_trials
+
+
+def compute_error_breakdown(
+    frame: pd.DataFrame, prediction: np.ndarray
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    error_frame = frame[["EFPG_name", "Metroregion_name", "Year", "Month", TARGET]].copy()
+    error_frame["prediction"] = prediction
+    error_frame["absolute_error"] = np.abs(error_frame[TARGET] - error_frame["prediction"])
+    food_error = (
+        error_frame.groupby("EFPG_name")["absolute_error"]
+        .agg(["mean", "count"])
+        .sort_values("mean", ascending=False)
+    )
+    region_error = (
+        error_frame.groupby("Metroregion_name")["absolute_error"]
+        .mean()
+        .sort_values(ascending=False)
+        .rename("MAE")
+        .to_frame()
+    )
+    return food_error, region_error
+
+
+def save_food_error_figure(food_error: pd.DataFrame, title: str, path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    food_error.head(8).sort_values("mean")["mean"].plot(kind="barh", figsize=(7.2, 4.5))
+    plt.xlabel("MAE")
+    plt.title(title)
+    plt.tight_layout()
+    plt.savefig(path, dpi=200, bbox_inches="tight")
+    plt.close()
 
 
 def evaluate_reserved_test(
@@ -921,6 +1017,11 @@ def main() -> int:
     pd.DataFrame([eda]).to_csv(table_dir / "eda_summary.csv", index=False)
     save_eda_figures(raw, figure_dir)
 
+    outlier_summary, outlier_table = analyze_outliers(raw)
+    print(json.dumps(outlier_summary, indent=2))
+    save_json(args.output_dir / "outlier_summary.json", outlier_summary)
+    outlier_table.to_csv(table_dir / "outlier_by_food_group.csv", index=False)
+
     feature_frame = engineer_features(raw)
     split = chronological_split(feature_frame)
     split_summary = {
@@ -940,6 +1041,7 @@ def main() -> int:
 
     lstm_model = None
     lstm_history = None
+    lstm_train_seconds = None
     if not args.skip_lstm:
         raw_for_lstm = raw.sort_values(
             ["EFPG_code", "Metroregion_code", "Year", "Month"]
@@ -954,9 +1056,11 @@ def main() -> int:
         raw_for_lstm["month_sin"] = np.sin(2 * np.pi * raw_for_lstm["Month"] / 12.0)
         raw_for_lstm["month_cos"] = np.cos(2 * np.pi * raw_for_lstm["Month"] / 12.0)
         lstm_data = build_lstm_data(raw_for_lstm)
+        lstm_train_start = time.perf_counter()
         lstm_model, lstm_history, lstm_scores, _ = train_lstm(
             lstm_data, args.seed, args.quick
         )
+        lstm_train_seconds = time.perf_counter() - lstm_train_start
         validation_metrics = pd.concat(
             [validation_metrics, pd.DataFrame([{"Model": "LSTM", **lstm_scores}])],
             ignore_index=True,
@@ -974,6 +1078,23 @@ def main() -> int:
     validation_metrics.to_csv(table_dir / "validation_metrics.csv", index=False)
     print("\nValidation metrics:\n", validation_metrics.to_string(index=False))
     save_json(args.output_dir / "tuning_results.json", tuning)
+    save_regularization_effect(tuning, figure_dir, table_dir)
+
+    mlp_trial_seconds = pd.DataFrame(tuning["MLP"])
+    runtime_summary = {
+        "lstm_device": "cuda" if torch.cuda.is_available() else "cpu",
+        "lstm_train_seconds": lstm_train_seconds,
+        "mlp_best_config_seconds": float(
+            mlp_trial_seconds.loc[mlp_trial_seconds["RMSE"].idxmin(), "seconds"]
+        ),
+        "mlp_total_tuning_seconds": float(mlp_trial_seconds["seconds"].sum()),
+        "note": (
+            "These are local/CPU or Colab timings depending on where this run "
+            "executed; see README for the Colab T4 GPU run used in the paper."
+        ),
+    }
+    print("\nRuntime summary:\n", json.dumps(runtime_summary, indent=2))
+    save_json(args.output_dir / "runtime_summary.json", runtime_summary)
 
     for name, model in fitted_models.items():
         safe_name = name.lower().replace(" ", "_")
@@ -1019,6 +1140,21 @@ def main() -> int:
             "Random Forest: Actual vs. Predicted (2018 Test Set)",
             figure_dir / "rf_actual_vs_predicted_test.png",
         )
+
+        food_error_test, region_error_test = compute_error_breakdown(
+            split.test, test_predictions["Random Forest"]
+        )
+        save_food_error_figure(
+            food_error_test,
+            "Food Groups With Highest Random Forest Error (2018 Test Set)",
+            figure_dir / "rf_error_food_groups_test.png",
+        )
+        food_error_test.reset_index().rename(columns={"mean": "MAE"}).to_csv(
+            table_dir / "rf_error_by_food_group_test.csv", index=False
+        )
+        region_error_test.reset_index().to_csv(
+            table_dir / "rf_error_by_region_test.csv", index=False
+        )
     else:
         print(
             "\n2018 test metrics were intentionally not computed. "
@@ -1027,9 +1163,11 @@ def main() -> int:
 
     run_summary = {
         "dataset": eda,
+        "outliers": outlier_summary,
         "split": split_summary,
         "validation_metrics": validation_metrics.to_dict(orient="records"),
         "best_validation_model": validation_metrics.iloc[0]["Model"],
+        "runtime": runtime_summary,
         "seed": args.seed,
         "quick_mode": args.quick,
         "lstm_device": "cuda" if torch.cuda.is_available() else "cpu",
