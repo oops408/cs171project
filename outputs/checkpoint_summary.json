@@ -35,8 +35,8 @@
   "validation_metrics": [
     {
       "Model": "Random Forest",
-      "RMSE": 0.030137639177421616,
-      "MAE": 0.016085105640403257,
+      "RMSE": 0.03013763917742162,
+      "MAE": 0.01608510564040326,
       "R2": 0.9956906128601806
     },
     {
@@ -73,9 +73,9 @@
   "best_validation_model": "Random Forest",
   "runtime": {
     "lstm_device": "cpu",
-    "lstm_train_seconds": 124.68190209998284,
-    "mlp_best_config_seconds": 9.785705900052562,
-    "mlp_total_tuning_seconds": 46.1358611001051,
+    "lstm_train_seconds": 112.14665440004319,
+    "mlp_best_config_seconds": 9.665523699950427,
+    "mlp_total_tuning_seconds": 45.871660799952224,
     "note": "These are local/CPU or Colab timings depending on where this run executed; see README for the Colab T4 GPU run used in the paper."
   },
   "seed": 42,

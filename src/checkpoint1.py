@@ -752,6 +752,51 @@ def predict_lstm(
     return targets, predictions
 
 
+def save_overview_figure(figure_dir: Path) -> None:
+    """Render a pipeline overview diagram: data -> features -> split -> models -> evaluation."""
+    figure_dir.mkdir(parents=True, exist_ok=True)
+
+    stages = [
+        ("F-MAP Raw Data\n113,400 rows\n2012-2018", "#cfe2f3"),
+        ("Feature Engineering\nlags, rolling means,\ncyclical month", "#d9ead3"),
+        ("Chronological Split\ntrain 2013-16 | val 2017\ntest 2018 (held out)", "#fff2cc"),
+        ("5 Model Families\nRidge, Tree, Forest,\nMLP, LSTM", "#f4cccc"),
+        ("Evaluation\nRMSE/MAE/R2,\nerror analysis", "#d0e0e3"),
+    ]
+
+    fig, ax = plt.subplots(figsize=(11.5, 2.6))
+    box_width, box_height = 1.9, 1.5
+    gap = 0.55
+    x = 0.0
+    centers = []
+    for label, color in stages:
+        rect = plt.Rectangle(
+            (x, 0), box_width, box_height,
+            facecolor=color, edgecolor="black", linewidth=1.0,
+        )
+        ax.add_patch(rect)
+        ax.text(
+            x + box_width / 2, box_height / 2, label,
+            ha="center", va="center", fontsize=9.5, wrap=True,
+        )
+        centers.append(x + box_width)
+        x += box_width + gap
+
+    for start in centers[:-1]:
+        ax.annotate(
+            "", xy=(start + gap, box_height / 2), xytext=(start, box_height / 2),
+            arrowprops=dict(arrowstyle="-|>", linewidth=1.4, color="black"),
+        )
+
+    ax.set_xlim(-0.2, x - gap + 0.2)
+    ax.set_ylim(-0.2, box_height + 0.2)
+    ax.axis("off")
+    ax.set_title("End-to-End Pipeline Overview", fontsize=12, pad=10)
+    plt.tight_layout()
+    plt.savefig(figure_dir / "overview_figure.png", dpi=200, bbox_inches="tight")
+    plt.close()
+
+
 def save_eda_figures(frame: pd.DataFrame, figure_dir: Path) -> None:
     figure_dir.mkdir(parents=True, exist_ok=True)
 
@@ -1016,6 +1061,7 @@ def main() -> int:
     print(json.dumps(eda, indent=2))
     pd.DataFrame([eda]).to_csv(table_dir / "eda_summary.csv", index=False)
     save_eda_figures(raw, figure_dir)
+    save_overview_figure(figure_dir)
 
     outlier_summary, outlier_table = analyze_outliers(raw)
     print(json.dumps(outlier_summary, indent=2))
