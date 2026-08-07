@@ -1,7 +1,7 @@
 {
   "lstm_device": "cpu",
-  "lstm_train_seconds": 124.23651990003418,
-  "mlp_best_config_seconds": 9.606473300023936,
-  "mlp_total_tuning_seconds": 44.6783085000352,
+  "lstm_train_seconds": 99.14740610000445,
+  "mlp_best_config_seconds": 9.450063399999635,
+  "mlp_total_tuning_seconds": 43.66645959999005,
   "note": "These are local/CPU or Colab timings depending on where this run executed; see README for the Colab T4 GPU run used in the paper."
 }

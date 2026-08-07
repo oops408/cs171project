@@ -1,25 +1,19 @@
 #!/usr/bin/env python3
 """CS 171 Group Project - final submission pipeline.
 
-This script downloads the USDA ERS Food-at-Home Monthly Area Prices dataset,
-performs EDA and per-food-group outlier analysis, creates leakage-safe lag
-features, uses a chronological split, trains and tunes five regression model
-families (Ridge, Decision Tree, Random Forest, MLP, LSTM) against a mean
-baseline, and saves every table and figure used in the final IEEE report:
-validation metrics, held-out 2018 test metrics, training curves, a
-regularization-effect chart, feature importance, error analysis by food group
-and region, an end-to-end pipeline overview diagram, and neural-network
-runtime tracking.
+Downloads the F-MAP dataset, builds leakage-safe lag/rolling features off a
+chronological split, then trains and tunes five model families (Ridge,
+Decision Tree, Random Forest, MLP, LSTM) against a mean baseline. Everything
+in the paper - metrics, figures, error analysis, the regularization chart -
+comes out of this one script.
 
-Default split:
-    training targets:   2013-2016
-    validation targets: 2017
-    reserved test:      2018
+Split:
+    train: 2013-2016
+    val:   2017
+    test:  2018 (2012 is just history for the 12-month lag)
 
-The raw 2012 observations are used only as historical context for 12-month lag
-features. Model and feature choices for this project are frozen, so
-`--evaluate-test` is the standard final run; pass no flag for a validation-only
-run during earlier development.
+Model choices are frozen at this point, so `--evaluate-test` is the run to
+use. Leave it off for a validation-only run.
 """
 
 from __future__ import annotations
