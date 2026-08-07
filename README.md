@@ -30,7 +30,8 @@ notebooks/
     CS171_Final_Colab.ipynb        Final-submission Colab notebook (run this one)
     checkpoint1/                   Archived Checkpoint 1 notebook, kept for the record
 reports/
-    CS171-FinalReport.docx         Final IEEE-format paper (export to PDF before submitting)
+    CS171-FinalReport.pdf          Final IEEE-format paper - this is the file to submit
+    CS171-FinalReport.docx         Source docx (kept for editing; do not submit this file)
     references.md                  IEEE-style bibliography for the paper's References section
     checkpoint1/                   Archived Checkpoint 1 report (docx + pdf)
 outputs/
